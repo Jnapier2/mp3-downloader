@@ -10,16 +10,27 @@ import zipfile
 import mp3_downloader as app
 
 
-class PublicSafetyTests(unittest.TestCase):
-    def test_public_identity_is_simple_and_generic(self):
+class SafetyContractTests(unittest.TestCase):
+    def test_application_identity_is_stable(self):
         self.assertEqual(app.APP_VERSION, "1.0.0")
-        self.assertEqual(app.RELEASE_CHANNEL, "public")
+        self.assertEqual(app.RELEASE_CHANNEL, "stable")
         self.assertEqual(app.EXPORTS_DIR.name, "support_exports")
         self.assertEqual(
             app.EXPECTED_RUNTIME_PINS,
             {"certifi": "2026.6.17", "yt-dlp": "2026.7.4"},
         )
         self.assertEqual(app.exact_pinned_requirements(), app.EXPECTED_RUNTIME_PINS)
+
+    def test_duplicate_database_connection_closes_before_cleanup(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            database = Path(temporary) / "duplicate-index.sqlite3"
+            with mock.patch.object(app, "ensure_dirs"):
+                with app.duplicate_db_connect(database) as connection:
+                    self.assertEqual(connection.execute("SELECT 1").fetchone(), (1,))
+            database.unlink()
+            self.assertFalse(database.exists())
+            self.assertFalse(Path(str(database) + "-wal").exists())
+            self.assertFalse(Path(str(database) + "-shm").exists())
 
     def test_url_guard_rejects_unsafe_inputs_without_dns(self):
         accepted = app.validate_public_url(

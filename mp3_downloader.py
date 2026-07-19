@@ -7,6 +7,7 @@ Third-party components retain their own copyright notices and licenses.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import hashlib
 import importlib.metadata as importlib_metadata
 import ipaddress
@@ -27,14 +28,14 @@ import sys
 import threading
 import time
 from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Sequence, Tuple
 from urllib.parse import urlparse, urlunparse
 import zipfile
 
 APP_ROOT = Path(__file__).resolve().parent
 APP_NAME = "MP3 Downloader"
 APP_VERSION = "1.0.0"
-RELEASE_CHANNEL = "public"
+RELEASE_CHANNEL = "stable"
 RIGHTS_HOLDER = "Gateway Information Group LLC"
 COPYRIGHT_NOTICE = "Copyright © 2026 Gateway Information Group LLC. All rights reserved."
 THIRD_PARTY_POLICY = "Preserve all third-party/open-source notices and licenses; no ownership is claimed over upstream components."
@@ -958,29 +959,39 @@ def media_identity_digest(info: Dict[str, Any], original_url: str) -> str:
     return hashlib.sha256(raw.encode("utf-8", errors="ignore")).hexdigest()
 
 
-def duplicate_db_connect(path: Path = DUPLICATE_INDEX_PATH) -> sqlite3.Connection:
+@contextmanager
+def duplicate_db_connect(path: Path = DUPLICATE_INDEX_PATH) -> Iterator[sqlite3.Connection]:
     ensure_dirs()
     connection = sqlite3.connect(str(path), timeout=DUPLICATE_DB_TIMEOUT_SECONDS)
-    connection.execute("PRAGMA journal_mode=WAL")
-    connection.execute("PRAGMA synchronous=NORMAL")
-    connection.execute("PRAGMA busy_timeout=15000")
-    connection.execute(
-        """
-        CREATE TABLE IF NOT EXISTS media_records (
-            media_digest TEXT PRIMARY KEY,
-            sha256 TEXT,
-            path TEXT NOT NULL,
-            size_bytes INTEGER NOT NULL,
-            title TEXT,
-            extractor TEXT,
-            created_utc TEXT NOT NULL,
-            updated_utc TEXT NOT NULL
+    try:
+        connection.execute("PRAGMA journal_mode=WAL")
+        connection.execute("PRAGMA synchronous=NORMAL")
+        connection.execute("PRAGMA busy_timeout=15000")
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS media_records (
+                media_digest TEXT PRIMARY KEY,
+                sha256 TEXT,
+                path TEXT NOT NULL,
+                size_bytes INTEGER NOT NULL,
+                title TEXT,
+                extractor TEXT,
+                created_utc TEXT NOT NULL,
+                updated_utc TEXT NOT NULL
+            )
+            """
         )
-        """
-    )
-    connection.execute("CREATE INDEX IF NOT EXISTS idx_media_sha256 ON media_records(sha256)")
-    connection.commit()
-    return connection
+        connection.execute("CREATE INDEX IF NOT EXISTS idx_media_sha256 ON media_records(sha256)")
+        connection.commit()
+        try:
+            yield connection
+        except BaseException:
+            connection.rollback()
+            raise
+        else:
+            connection.commit()
+    finally:
+        connection.close()
 
 
 def delete_indexed_media(media_digest: str) -> None:
@@ -2011,9 +2022,9 @@ def self_test(config_path: Path, verbose: bool = False) -> int:
         failures.append("FFmpeg/FFprobe not found")
         print("[FAIL] FFmpeg and FFprobe were not found.")
     if APP_VERSION == "1.0.0" and RIGHTS_HOLDER and COPYRIGHT_NOTICE:
-        print("[OK] Public release identity and rights notice verified.")
+        print("[OK] Application identity and rights notice verified.")
     else:
-        failures.append("public release identity")
+        failures.append("application identity")
     try:
         test_db = TEMP_DIR / "self_test_index.sqlite3"
         with duplicate_db_connect(test_db) as connection:

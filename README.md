@@ -1,5 +1,7 @@
 # MP3 Downloader
 
+[![CI](https://github.com/Jnapier2/mp3-downloader/actions/workflows/ci.yml/badge.svg)](https://github.com/Jnapier2/mp3-downloader/actions/workflows/ci.yml)
+
 MP3 Downloader is a guarded Windows command-line utility for converting the best available audio stream from one authorized HTTP(S) media URL into a validated MP3 file. It combines `yt-dlp` and an operator-supplied FFmpeg installation with explicit network, content, filesystem, and privacy boundaries.
 
 ## What it demonstrates
@@ -86,8 +88,4 @@ The application's interactive `--self-test` is different: it checks the installe
 - Extractor compatibility depends on upstream website behavior and the installed, pinned `yt-dlp` release.
 - A support export is designed to reduce sensitive-data exposure, not to prove that every future log message is safe. Review the archive before sharing it.
 
-See [SECURITY.md](SECURITY.md) for the reporting boundary and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency ownership.
-
-## Portfolio context
-
-This public repository is a sanitized code-review artifact. Private release records, internal build records, handoff materials, deployment automation, binaries, downloaded media, and support bundles are intentionally excluded. The first-party source and documentation remain copyright-protected under [LICENSE.md](LICENSE.md).
+See [SECURITY.md](SECURITY.md) for the reporting boundary, [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency ownership, and [LICENSE.md](LICENSE.md) for the source and documentation terms.
