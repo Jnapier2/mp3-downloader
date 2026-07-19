@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Jnapier2/mp3-downloader/actions/workflows/ci.yml/badge.svg)](https://github.com/Jnapier2/mp3-downloader/actions/workflows/ci.yml)
 
-MP3 Downloader is a guarded Windows command-line utility for converting the best available audio stream from one authorized HTTP(S) media URL into a validated MP3 file. It combines `yt-dlp` and an operator-supplied FFmpeg installation with explicit network, content, filesystem, and privacy boundaries.
+MP3 Downloader turns a single authorized media URL into a validated MP3 through a controlled Windows workflow. Metadata preflight, bounded recovery, duplicate reconciliation, and redacted support exports help limit repeated work and diagnostic-data disclosure; rights decisions remain with the operator.
 
 ## Retrieval safeguards
 
