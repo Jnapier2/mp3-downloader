@@ -4,7 +4,7 @@
 
 MP3 Downloader is a guarded Windows command-line utility for converting the best available audio stream from one authorized HTTP(S) media URL into a validated MP3 file. It combines `yt-dlp` and an operator-supplied FFmpeg installation with explicit network, content, filesystem, and privacy boundaries.
 
-## What it demonstrates
+## Retrieval safeguards
 
 - Submitted HTTP(S) URL preflight with embedded-credential and private-address rejection.
 - Metadata-only preflight before any media is written.
@@ -53,7 +53,7 @@ Run `python mp3_downloader.py --help` for the complete interface. Runtime output
 
 ## Configuration
 
-`config.example.json` is the concise starting point; the launcher copies it to `config.json` when needed. Omitted settings are filled from the single set of safe defaults in the application source. Notable controls include:
+The launcher copies `config.example.json` to `config.json` when no local configuration exists. Missing settings use defaults defined in the application source. Notable controls include:
 
 - `allow_private_networks: false`
 - `allow_live_streams: false`
@@ -68,7 +68,7 @@ Run `python mp3_downloader.py --help` for the complete interface. Runtime output
 python mp3_downloader.py --export-support
 ```
 
-The resulting ZIP contains only a constrained status summary and redacted configuration snapshot. It never includes application logs, run history, queue records, media metadata, output filenames, source hosts, or uploader/title details. Review it before sharing. It also excludes media, partial downloads, databases, source archives, full URLs, configured local paths, and local dependency bundles.
+The ZIP contains a constrained status summary and redacted configuration snapshot. It excludes logs, run history, queue records, media and partial downloads, media metadata, output filenames, source hosts, full URLs, uploader or title details, databases, source archives, configured local paths, and local dependency bundles. Review it before sharing.
 
 ## Verification
 
