@@ -30,7 +30,6 @@ This project does not bypass DRM, authentication, paywalls, anti-bot controls, o
 py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --require-hashes --only-binary=:all: -r requirements.txt
-Copy-Item config.example.json config.json
 .\run_mp3_downloader.bat
 ```
 
@@ -52,7 +51,7 @@ Run `python mp3_downloader.py --help` for the complete interface. Runtime output
 
 ## Configuration
 
-`config_default.json` documents the complete release defaults. Copy `config.example.json` to `config.json` for a concise starting point. On first run, omitted settings are filled with safe defaults. Notable controls include:
+`config.example.json` is the concise starting point; the launcher copies it to `config.json` when needed. Omitted settings are filled from the single set of safe defaults in the application source. Notable controls include:
 
 - `allow_private_networks: false`
 - `allow_live_streams: false`

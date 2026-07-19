@@ -36,12 +36,10 @@ APP_NAME = "MP3 Downloader"
 APP_VERSION = "1.0.0"
 RELEASE_CHANNEL = "public"
 RIGHTS_HOLDER = "Gateway Information Group LLC"
-COPYRIGHT_YEAR = 2026
 COPYRIGHT_NOTICE = "Copyright © 2026 Gateway Information Group LLC. All rights reserved."
 THIRD_PARTY_POLICY = "Preserve all third-party/open-source notices and licenses; no ownership is claimed over upstream components."
 SUPPORT_EXPORT_SCHEMA = 1
 CONFIG_SCHEMA_VERSION = 1
-STATE_SCHEMA_VERSION = 1
 MAX_PARALLEL_LINKS = 3
 MAX_FRAGMENT_WORKERS = 5
 LOCK_STALE_SECONDS = 6 * 60 * 60
@@ -76,13 +74,7 @@ RUN_HISTORY_LOCK = threading.Lock()
 HOST_TOLERANCE_LOCK = threading.Lock()
 
 DEFAULT_CONFIG: Dict[str, Any] = {
-    "app_name": APP_NAME,
     "config_version": CONFIG_SCHEMA_VERSION,
-    "release_channel": RELEASE_CHANNEL,
-    "state_schema_version": STATE_SCHEMA_VERSION,
-    "rights_holder": RIGHTS_HOLDER,
-    "copyright_year": COPYRIGHT_YEAR,
-    "copyright_notice": COPYRIGHT_NOTICE,
     "mp3_quality_kbps": 192,
     "timeout_seconds": 30,
     "retries": 5,
@@ -442,32 +434,32 @@ def validate_config(raw: Dict[str, Any]) -> Dict[str, Any]:
         )
     normalized = dict(DEFAULT_CONFIG)
     normalized.update({
-        "mp3_quality_kbps": coerce_int(raw.get("mp3_quality_kbps"), 192, 64, 320),
-        "timeout_seconds": coerce_int(raw.get("timeout_seconds"), 30, 10, 180),
-        "retries": coerce_int(raw.get("retries"), 5, 0, 20),
-        "fragment_retries": coerce_int(raw.get("fragment_retries"), 10, 0, 50),
-        "outer_recovery_attempts": coerce_int(raw.get("outer_recovery_attempts"), 1, 0, 3),
-        "retry_backoff_seconds": coerce_float(raw.get("retry_backoff_seconds"), 1.5, 0.0, 30.0),
-        "retry_jitter_seconds": coerce_float(raw.get("retry_jitter_seconds"), 0.75, 0.0, 10.0),
-        "retry_after_cap_seconds": coerce_float(raw.get("retry_after_cap_seconds"), 120.0, 5.0, 600.0),
-        "max_size_mb": coerce_float(raw.get("max_size_mb"), 2048.0, 10.0, 10240.0),
-        "verify_ssl": coerce_bool(raw.get("verify_ssl"), True),
-        "overwrite": coerce_bool(raw.get("overwrite"), False),
-        "keep_partial_on_error": coerce_bool(raw.get("keep_partial_on_error"), True),
-        "single_instance_guard": coerce_bool(raw.get("single_instance_guard"), True),
-        "duplicate_detection_enabled": coerce_bool(raw.get("duplicate_detection_enabled"), True),
-        "hide_completed_media": coerce_bool(raw.get("hide_completed_media"), False),
-        "write_metadata_tags": coerce_bool(raw.get("write_metadata_tags"), True),
-        "allow_live_streams": coerce_bool(raw.get("allow_live_streams"), False),
-        "allow_private_networks": coerce_bool(raw.get("allow_private_networks"), False),
-        "ffmpeg_location": str(raw.get("ffmpeg_location") or "").strip(),
-        "adaptive_fragment_workers": coerce_int(raw.get("adaptive_fragment_workers"), 3, 1, MAX_FRAGMENT_WORKERS),
-        "adaptive_fragment_workers_min": coerce_int(raw.get("adaptive_fragment_workers_min"), 1, 1, MAX_FRAGMENT_WORKERS),
-        "adaptive_fragment_workers_max": coerce_int(raw.get("adaptive_fragment_workers_max"), 5, 1, MAX_FRAGMENT_WORKERS),
-        "adaptive_fragment_burst_successes": coerce_int(raw.get("adaptive_fragment_burst_successes"), 3, 1, 20),
-        "queue_worker_idle_timeout_seconds": coerce_int(raw.get("queue_worker_idle_timeout_seconds"), 600, 120, 7200),
-        "queue_worker_restart_on_stall": coerce_bool(raw.get("queue_worker_restart_on_stall"), True),
-        "dry_run": coerce_bool(raw.get("dry_run"), False),
+        "mp3_quality_kbps": coerce_int(raw.get("mp3_quality_kbps"), DEFAULT_CONFIG["mp3_quality_kbps"], 64, 320),
+        "timeout_seconds": coerce_int(raw.get("timeout_seconds"), DEFAULT_CONFIG["timeout_seconds"], 10, 180),
+        "retries": coerce_int(raw.get("retries"), DEFAULT_CONFIG["retries"], 0, 20),
+        "fragment_retries": coerce_int(raw.get("fragment_retries"), DEFAULT_CONFIG["fragment_retries"], 0, 50),
+        "outer_recovery_attempts": coerce_int(raw.get("outer_recovery_attempts"), DEFAULT_CONFIG["outer_recovery_attempts"], 0, 3),
+        "retry_backoff_seconds": coerce_float(raw.get("retry_backoff_seconds"), DEFAULT_CONFIG["retry_backoff_seconds"], 0.0, 30.0),
+        "retry_jitter_seconds": coerce_float(raw.get("retry_jitter_seconds"), DEFAULT_CONFIG["retry_jitter_seconds"], 0.0, 10.0),
+        "retry_after_cap_seconds": coerce_float(raw.get("retry_after_cap_seconds"), DEFAULT_CONFIG["retry_after_cap_seconds"], 5.0, 600.0),
+        "max_size_mb": coerce_float(raw.get("max_size_mb"), DEFAULT_CONFIG["max_size_mb"], 10.0, 10240.0),
+        "verify_ssl": coerce_bool(raw.get("verify_ssl"), DEFAULT_CONFIG["verify_ssl"]),
+        "overwrite": coerce_bool(raw.get("overwrite"), DEFAULT_CONFIG["overwrite"]),
+        "keep_partial_on_error": coerce_bool(raw.get("keep_partial_on_error"), DEFAULT_CONFIG["keep_partial_on_error"]),
+        "single_instance_guard": coerce_bool(raw.get("single_instance_guard"), DEFAULT_CONFIG["single_instance_guard"]),
+        "duplicate_detection_enabled": coerce_bool(raw.get("duplicate_detection_enabled"), DEFAULT_CONFIG["duplicate_detection_enabled"]),
+        "hide_completed_media": coerce_bool(raw.get("hide_completed_media"), DEFAULT_CONFIG["hide_completed_media"]),
+        "write_metadata_tags": coerce_bool(raw.get("write_metadata_tags"), DEFAULT_CONFIG["write_metadata_tags"]),
+        "allow_live_streams": coerce_bool(raw.get("allow_live_streams"), DEFAULT_CONFIG["allow_live_streams"]),
+        "allow_private_networks": coerce_bool(raw.get("allow_private_networks"), DEFAULT_CONFIG["allow_private_networks"]),
+        "ffmpeg_location": str(raw.get("ffmpeg_location") or DEFAULT_CONFIG["ffmpeg_location"]).strip(),
+        "adaptive_fragment_workers": coerce_int(raw.get("adaptive_fragment_workers"), DEFAULT_CONFIG["adaptive_fragment_workers"], 1, MAX_FRAGMENT_WORKERS),
+        "adaptive_fragment_workers_min": coerce_int(raw.get("adaptive_fragment_workers_min"), DEFAULT_CONFIG["adaptive_fragment_workers_min"], 1, MAX_FRAGMENT_WORKERS),
+        "adaptive_fragment_workers_max": coerce_int(raw.get("adaptive_fragment_workers_max"), DEFAULT_CONFIG["adaptive_fragment_workers_max"], 1, MAX_FRAGMENT_WORKERS),
+        "adaptive_fragment_burst_successes": coerce_int(raw.get("adaptive_fragment_burst_successes"), DEFAULT_CONFIG["adaptive_fragment_burst_successes"], 1, 20),
+        "queue_worker_idle_timeout_seconds": coerce_int(raw.get("queue_worker_idle_timeout_seconds"), DEFAULT_CONFIG["queue_worker_idle_timeout_seconds"], 120, 7200),
+        "queue_worker_restart_on_stall": coerce_bool(raw.get("queue_worker_restart_on_stall"), DEFAULT_CONFIG["queue_worker_restart_on_stall"]),
+        "dry_run": coerce_bool(raw.get("dry_run"), DEFAULT_CONFIG["dry_run"]),
         "user_agent": str(raw.get("user_agent") or DEFAULT_CONFIG["user_agent"]).strip()[:500],
         "output_filename_template": normalize_output_filename_template(
             raw.get("output_filename_template")
@@ -479,13 +471,7 @@ def validate_config(raw: Dict[str, Any]) -> Dict[str, Any]:
     normalized["adaptive_fragment_workers_max"] = max(
         normalized["adaptive_fragment_workers"], normalized["adaptive_fragment_workers_max"]
     )
-    normalized["app_name"] = APP_NAME
     normalized["config_version"] = CONFIG_SCHEMA_VERSION
-    normalized["release_channel"] = RELEASE_CHANNEL
-    normalized["state_schema_version"] = STATE_SCHEMA_VERSION
-    normalized["rights_holder"] = RIGHTS_HOLDER
-    normalized["copyright_year"] = COPYRIGHT_YEAR
-    normalized["copyright_notice"] = COPYRIGHT_NOTICE
     return normalized
 
 

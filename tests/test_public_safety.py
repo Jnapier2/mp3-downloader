@@ -70,7 +70,8 @@ class PublicSafetyTests(unittest.TestCase):
         self.assertEqual(config["max_size_mb"], 10.0)
         self.assertFalse(config["allow_private_networks"])
         self.assertEqual(config["output_filename_template"], app.DEFAULT_CONFIG["output_filename_template"])
-        self.assertEqual(config["rights_holder"], "Gateway Information Group LLC")
+        self.assertEqual(set(config), set(app.DEFAULT_CONFIG))
+        self.assertNotIn("rights_holder", config)
 
     def test_output_filesystem_guard_rejects_escape_and_multiple_links(self):
         with tempfile.TemporaryDirectory() as temporary:
