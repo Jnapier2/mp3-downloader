@@ -4,6 +4,8 @@
 
 MP3 Downloader turns a single authorized media URL into a validated MP3 through a controlled Windows workflow. Metadata preflight, bounded recovery, duplicate reconciliation, and redacted support exports help limit repeated work and diagnostic-data disclosure; rights decisions remain with the operator.
 
+The workflow uses two explicit commitment points: metadata determines whether retrieval may proceed, and FFprobe plus duplicate reconciliation determine whether the result may be accepted. This avoids treating either a reachable URL or a completed transfer as sufficient evidence on its own.
+
 ## Retrieval safeguards
 
 - Submitted HTTP(S) URL preflight with embedded-credential and private-address rejection.
@@ -54,6 +56,8 @@ Run `python mp3_downloader.py --help` for the complete interface. Runtime output
 ## Configuration
 
 The launcher copies `config.example.json` to `config.json` when no local configuration exists. Missing settings use defaults defined in the application source. Notable controls include:
+
+The local JSON file centralizes the operating boundary—network access, output behavior, recovery, capacity, and concurrency—so policy can be reviewed without changing code.
 
 - `allow_private_networks: false`
 - `allow_live_streams: false`
