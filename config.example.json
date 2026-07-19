@@ -1,0 +1,13 @@
+{
+  "config_version": 1,
+  "mp3_quality_kbps": 192,
+  "max_size_mb": 2048,
+  "verify_ssl": true,
+  "overwrite": false,
+  "hide_completed_media": false,
+  "allow_live_streams": false,
+  "allow_private_networks": false,
+  "ffmpeg_location": "",
+  "dry_run": false,
+  "output_filename_template": "%(title).180B [%(id)s].%(ext)s"
+}
