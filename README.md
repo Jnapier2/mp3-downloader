@@ -4,7 +4,7 @@
 
 MP3 Downloader turns a single authorized media URL into a validated MP3 through a controlled Windows workflow. Metadata preflight, bounded recovery, duplicate reconciliation, and redacted support exports help limit repeated work and diagnostic-data disclosure; rights decisions remain with the operator.
 
-The workflow uses two explicit commitment points: metadata determines whether retrieval may proceed, and FFprobe plus duplicate reconciliation determine whether the result may be accepted. This avoids treating either a reachable URL or a completed transfer as sufficient evidence on its own.
+A download begins only after metadata preflight, and it counts as complete only after output validation and duplicate reconciliation. A reachable URL or finished transfer alone is not treated as proof of a usable result.
 
 ## Retrieval safeguards
 
