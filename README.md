@@ -93,3 +93,9 @@ The application's interactive `--self-test` is different: it checks the installe
 - A support export is designed to reduce sensitive-data exposure, not to prove that every future log message is safe. Review the archive before sharing it.
 
 See [SECURITY.md](SECURITY.md) for the reporting boundary, [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency ownership, and [LICENSE.md](LICENSE.md) for the source and documentation terms.
+
+## Portfolio and rights
+
+[Portfolio](https://jerry-napier-portfolio.netlify.app/) · [GitHub profile](https://github.com/Jnapier2)
+
+Copyright © 2026 Gateway Information Group LLC. All rights reserved. Third-party components and services retain their own rights and terms.
