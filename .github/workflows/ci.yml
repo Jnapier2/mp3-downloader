@@ -37,7 +37,22 @@ jobs:
         run: python -c "import certifi, yt_dlp"
       - name: Compile
         run: python -m compileall -q mp3_downloader.py tests
-      - name: Test offline behavior
-        run: python -m unittest discover -s tests -v
+      - name: Test offline behavior with bounded diagnostics
+        id: offline_tests
+        shell: pwsh
+        run: |
+          python -m unittest discover -s tests -v *> offline-tests.txt
+          $exitCode = $LASTEXITCODE
+          Get-Content -LiteralPath offline-tests.txt
+          exit $exitCode
+      - name: Upload offline-test diagnostics
+        if: ${{ failure() && steps.offline_tests.outcome == 'failure' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.0
+        with:
+          name: offline-tests-python-${{ matrix.python-version }}
+          path: offline-tests.txt
+          if-no-files-found: error
+          compression-level: 9
+          retention-days: 7
 
 # Copyright © 2026 Gateway Information Group LLC. All rights reserved.
