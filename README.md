@@ -55,9 +55,7 @@ Run `python mp3_downloader.py --help` for the complete interface. Runtime output
 
 ## Configuration
 
-The launcher copies `config.example.json` to `config.json` when no local configuration exists. Missing settings use defaults defined in the application source. Notable controls include:
-
-The local JSON file centralizes the operating boundary—network access, output behavior, recovery, capacity, and concurrency—so policy can be reviewed without changing code.
+The launcher copies `config.example.json` to `config.json` when no local configuration exists. Missing settings use defaults defined in the application source. The local JSON file centralizes the operating boundary—network access, output behavior, recovery, capacity, and concurrency—so policy can be reviewed without changing code. Notable controls include:
 
 - `allow_private_networks: false`
 - `allow_live_streams: false`
