@@ -17,7 +17,7 @@ class SafetyContractTests(unittest.TestCase):
         self.assertEqual(app.EXPORTS_DIR.name, "support_exports")
         self.assertEqual(
             app.EXPECTED_RUNTIME_PINS,
-            {"certifi": "2026.6.17", "yt-dlp": "2026.7.4"},
+            {"certifi": "2026.7.22", "yt-dlp": "2026.7.4"},
         )
         self.assertEqual(app.exact_pinned_requirements(), app.EXPECTED_RUNTIME_PINS)
 
@@ -244,7 +244,7 @@ class SafetyContractTests(unittest.TestCase):
                         return_value={
                             "status": "repair_required",
                             "installed": {
-                                "certifi": "2026.6.17",
+                                "certifi": "2026.7.22",
                                 "yt-dlp": "2026.7.4",
                             },
                             "unexpected_distributions": {

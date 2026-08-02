@@ -47,7 +47,7 @@ LOCK_STALE_SECONDS = 6 * 60 * 60
 LOCK_HEARTBEAT_SECONDS = 30
 DUPLICATE_DB_TIMEOUT_SECONDS = 15
 EXPECTED_RUNTIME_PINS: Dict[str, str] = {
-    "certifi": "2026.6.17",
+    "certifi": "2026.7.22",
     "yt-dlp": "2026.7.4",
 }
 ALLOWED_RUNTIME_DISTRIBUTIONS = frozenset({*EXPECTED_RUNTIME_PINS, "pip", "setuptools", "wheel"})
