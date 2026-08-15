@@ -17,7 +17,11 @@ class LauncherContractTests(unittest.TestCase):
         self.assertIn('cd /d "%~dp0"', lower)
         self.assertIn("mp3_downloader.py", lower)
         self.assertIn('"%mp3_script%" %*', lower)
-        self.assertLess(lower.index(r'.venv\scripts\python.exe'), lower.index("where py.exe"))
+        local_venv = lower.index(r'.venv\scripts\python.exe')
+        path_python = lower.index("where python.exe")
+        py_launcher = lower.index("where py.exe")
+        self.assertLess(local_venv, path_python)
+        self.assertLess(path_python, py_launcher)
         self.assertNotIn("this launcher does not forward command-line arguments", lower)
         self.assertNotRegex(lower, r"sys\.version_info\s+\^>=")
 
