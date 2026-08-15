@@ -37,25 +37,25 @@ python -m pip install --require-hashes --only-binary=:all: -r requirements.txt
 .\run_mp3_downloader.bat
 ```
 
-The launcher uses an existing environment and never installs, updates, or downloads dependencies silently.
+`run_mp3_downloader.bat` is the canonical Windows entrypoint. It resolves its own project root, prefers the local `.venv`, validates Python 3.11 or newer and the pinned imports, opens the normal interactive flow when no arguments are supplied, and forwards explicit CLI arguments to the same Python engine. It never installs, updates, or downloads dependencies silently.
 
 For a non-download preflight:
 
 ```powershell
-python mp3_downloader.py --url "https://example.org/authorized-media" --list-only
+.\run_mp3_downloader.bat --url "https://example.org/authorized-media" --list-only
 ```
 
 For one authorized download:
 
 ```powershell
-python mp3_downloader.py --url "https://example.org/authorized-media" --easy
+.\run_mp3_downloader.bat --url "https://example.org/authorized-media" --easy
 ```
 
-Run `python mp3_downloader.py --help` for the complete interface. Runtime output is written below `downloads/`, `logs/`, `state/`, and `temp/`; all are excluded from version control.
+Run `.\run_mp3_downloader.bat --help` for the complete interface. Runtime output is written below `downloads/`, `logs/`, `state/`, and `temp/`; all are excluded from version control.
 
 ## Configuration
 
-The launcher copies `config.example.json` to `config.json` when no local configuration exists. Missing settings use defaults defined in the application source. The local JSON file centralizes the operating boundary—network access, output behavior, recovery, capacity, and concurrency—so policy can be reviewed without changing code. Notable controls include:
+The no-argument launcher path copies `config.example.json` to `config.json` when no local configuration exists. Explicit read-only and maintenance arguments are forwarded before that compatibility copy. Missing settings use defaults defined in the application source. The local JSON file centralizes the operating boundary—network access, output behavior, recovery, capacity, and concurrency—so policy can be reviewed without changing code. Notable controls include:
 
 - `allow_private_networks: false`
 - `allow_live_streams: false`
@@ -67,21 +67,23 @@ The launcher copies `config.example.json` to `config.json` when no local configu
 ## Support export
 
 ```powershell
-python mp3_downloader.py --export-support
+.\export_support.bat
 ```
+
+`export_support.bat` is a thin compatibility redirect to `run_mp3_downloader.bat --export-support`; it does not duplicate interpreter, dependency, or configuration logic.
 
 The ZIP contains a constrained status summary and redacted configuration snapshot. It excludes logs, run history, queue records, media and partial downloads, media metadata, output filenames, source hosts, full URLs, uploader or title details, databases, source archives, configured local paths, and local dependency bundles. Review it before sharing.
 
 ## Verification
 
-The deterministic test suite does not contact websites, download media, or require `yt-dlp`/FFmpeg:
+The deterministic test suite does not contact websites, download media, or require FFmpeg:
 
 ```powershell
 python -m compileall -q mp3_downloader.py tests
 python -m unittest discover -s tests -v
 ```
 
-The application's interactive `--self-test` is different: it checks the installed dependency lock and performs a short local FFmpeg/FFprobe conversion test.
+GitHub Actions also launches the canonical BAT from an unrelated Windows working directory on Python 3.11 and 3.13. The application's interactive `--self-test` is different: it checks the installed dependency lock and performs a short local FFmpeg/FFprobe conversion test.
 
 ## Security notes and limitations
 
