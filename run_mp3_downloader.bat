@@ -21,6 +21,14 @@ if exist "%~dp0.venv\Scripts\python.exe" (
 )
 
 if not defined PYTHON_EXE (
+    where python.exe >nul 2>&1
+    if not errorlevel 1 (
+        python.exe -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
+        if not errorlevel 1 set "PYTHON_EXE=python.exe"
+    )
+)
+
+if not defined PYTHON_EXE (
     where py.exe >nul 2>&1
     if not errorlevel 1 (
         py.exe -3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
@@ -28,14 +36,6 @@ if not defined PYTHON_EXE (
             set "PYTHON_EXE=py.exe"
             set "PYTHON_ARGS=-3"
         )
-    )
-)
-
-if not defined PYTHON_EXE (
-    where python.exe >nul 2>&1
-    if not errorlevel 1 (
-        python.exe -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
-        if not errorlevel 1 set "PYTHON_EXE=python.exe"
     )
 )
 
