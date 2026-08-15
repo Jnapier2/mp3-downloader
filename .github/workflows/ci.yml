@@ -39,5 +39,20 @@ jobs:
         run: python -m compileall -q mp3_downloader.py tests
       - name: Test offline behavior
         run: python -m unittest discover -s tests -v
+      - name: Verify canonical launcher from an unrelated working directory
+        shell: powershell
+        run: |
+          $foreign = Join-Path $env:RUNNER_TEMP "mp3 downloader foreign cwd"
+          New-Item -ItemType Directory -Path $foreign -Force | Out-Null
+          $launcher = Join-Path $env:GITHUB_WORKSPACE "run_mp3_downloader.bat"
+          Push-Location $foreign
+          try {
+            & $launcher --version
+            if ($LASTEXITCODE -ne 0) { throw "Canonical launcher --version failed with exit code $LASTEXITCODE" }
+            if (Test-Path (Join-Path $foreign "config.json")) { throw "Launcher wrote config.json beneath caller CWD" }
+          }
+          finally {
+            Pop-Location
+          }
 
 # Copyright © 2026 Gateway Information Group LLC. All rights reserved.
