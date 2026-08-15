@@ -37,7 +37,7 @@ python -m pip install --require-hashes --only-binary=:all: -r requirements.txt
 .\run_mp3_downloader.bat
 ```
 
-`run_mp3_downloader.bat` is the canonical Windows entrypoint. It resolves its own project root, prefers the local `.venv`, validates Python 3.11 or newer and the pinned imports, opens the normal interactive flow when no arguments are supplied, and forwards explicit CLI arguments to the same Python engine. It never installs, updates, or downloads dependencies silently.
+`run_mp3_downloader.bat` is the canonical Windows entrypoint. It resolves its own project root, prefers the local `.venv`, then a validated `python.exe` already on `PATH`, then the Windows `py -3` launcher. It validates Python 3.11 or newer and the pinned imports, opens the normal interactive flow when no arguments are supplied, and forwards explicit CLI arguments to the same Python engine. It never installs, updates, or downloads dependencies silently.
 
 For a non-download preflight:
 
