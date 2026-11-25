@@ -39,13 +39,13 @@ python -m pip install --require-hashes --only-binary=:all: -r requirements.txt
 
 `run_mp3_downloader.bat` is the canonical Windows entrypoint. It resolves its own project root, prefers the local `.venv`, then a validated `python.exe` already on `PATH`, then the Windows `py -3` launcher. It validates Python 3.11 or newer and the pinned imports, opens the normal interactive flow when no arguments are supplied, and forwards explicit CLI arguments to the same Python engine. It never installs, updates, or downloads dependencies silently.
 
-For a non-download preflight:
+Replace `https://example.org/authorized-media` in either example with a media URL you own or have permission to save. The preflight lists metadata without saving an audio file.
 
 ```powershell
 .\run_mp3_downloader.bat --url "https://example.org/authorized-media" --list-only
 ```
 
-For one authorized download:
+Run this command to save one authorized audio file:
 
 ```powershell
 .\run_mp3_downloader.bat --url "https://example.org/authorized-media" --easy
@@ -82,6 +82,8 @@ The deterministic test suite does not contact websites, download media, or requi
 python -m compileall -q mp3_downloader.py tests
 python -m unittest discover -s tests -v
 ```
+
+The synthetic preflight example shows how the tool reports missing or unlisted availability and returns without producing an audio file. You can inspect that behavior without a media URL. [Synthetic preflight test](tests/test_safety_contracts.py#L127-L167)
 
 GitHub Actions also launches the canonical BAT from an unrelated Windows working directory on Python 3.11 and 3.13. The application's interactive `--self-test` is different: it checks the installed dependency lock and performs a short local FFmpeg/FFprobe conversion test.
 
